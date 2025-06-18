@@ -10,8 +10,12 @@ from lstm_decoder import EEGDataset, EEG_LSTM, train_model
 # ----------------------
 # Step 1: Preprocess EEG data
 # ----------------------
-labels, data, info = preprocess_data(nb_subjects=5, run_type=2, band='mu', crop=(1.0, 2.0))
-X = data['mu']  # shape (N, C, T)
+labels, data, info = preprocess_data(nb_subjects=80, run_type=2, band='both', crop=(0.5, 2.5))  # adjust crop as needed
+
+X_mu = data.get('mu')
+X_beta = data.get('beta')
+X = np.concatenate([X_mu, X_beta], axis=1)  # (N, C_mu + C_beta, T)
+X = (X - X.mean(axis=-1, keepdims=True)) / (X.std(axis=-1, keepdims=True) + 1e-6) # normalise each trial
 y = labels
 
 # ----------------------
