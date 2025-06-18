@@ -5,7 +5,7 @@ from sklearn.dummy import DummyClassifier
 from torch.utils.data import DataLoader
 
 from preprocessing import preprocess_data
-from lstm_decoder import EEGDataset, EEG_LSTM, train_model
+from lstm_decoder import EEGDataset, EEG_LSTM, CNN_LSTM train_model
 
 # ----------------------
 # Step 1: Preprocess EEG data
@@ -52,3 +52,27 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+# ----------------------
+# Step 5: Train CNN-LSTM Hybrid
+# ----------------------
+model_hybrid = CNN_LSTM(input_channels=X.shape[1], input_time=X.shape[2], num_classes=2)
+model_hybrid, train_acc_hybrid, val_acc_hybrid = train_model(model_hybrid, train_loader, (X_val, y_val), epochs=30)
+
+# ----------------------
+# Step 6: Plot Comparison
+# ----------------------
+plt.figure(figsize=(10, 6))
+
+plt.plot(val_acc_list, label='LSTM (Validation)', linestyle='-')
+plt.plot(val_acc_hybrid, label='CNN-LSTM (Validation)', linestyle='--')
+plt.hlines(chance_acc, 0, len(val_acc_list)-1, colors='red', linestyles='dotted', label='Chance')
+
+plt.xlabel('Epoch')
+plt.ylabel('Validation Accuracy (%)')
+plt.title('Comparison of LSTM and CNN-LSTM on Motor Imagery Decoding')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
