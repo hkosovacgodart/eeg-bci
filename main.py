@@ -5,7 +5,7 @@ from sklearn.dummy import DummyClassifier
 from torch.utils.data import DataLoader
 
 from preprocessing import preprocess_data
-from lstm_decoder import EEGDataset, EEG_LSTM, CNN_LSTM train_model
+from lstm_decoder import EEGDataset, EEG_LSTM, CNN_LSTM, train_model
 
 # ----------------------
 # Step 1: Preprocess EEG data
